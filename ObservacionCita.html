@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ObservacionCita - App Real</title>
+    <link rel="stylesheet" href="ObservacionCita.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div id="reloj" class="reloj"></div>
+
+    <div class="app-container">
+        <div class="card">
+            <h1>Observación de Cita</h1>
+
+            <div class="form-group">
+                <label for="idCita">ID Cita</label>
+                <input type="text" id="idCita" placeholder="Ingrese el ID de la cita" oninput="obtenerDatosCita()">
+            </div>
+
+            <div class="form-group">
+                <label for="cita">Cita Asociada</label>
+                <input type="text" id="cita" placeholder="Cita asociada" disabled>
+            </div>
+
+            <div class="form-group">
+                <label for="medico">Médico Responsable</label>
+                <input type="text" id="medico" placeholder="Nombre del médico" disabled>
+            </div>
+
+            <!-- Botón para preguntar si la cita tiene observaciones -->
+            <div class="form-group">
+                <label>¿La cita tiene observaciones?</label>
+                <button class="btn btn-primary" onclick="preguntarObservaciones()">Sí</button>
+            </div>
+
+            <!-- Campo para ingresar la cantidad de observaciones -->
+            <div class="form-group" id="cantidadObservacionesContainer" style="display:none;">
+                <label for="cantidadObservaciones">¿Cuántas observaciones necesita para esta cita?</label>
+                <input type="number" id="cantidadObservaciones" min="1" max="10" placeholder="Ingrese cantidad de observaciones" oninput="mostrarObservaciones()">
+            </div>
+
+            <!-- Contenedor donde se mostrarán los campos de observaciones -->
+            <div id="observacionesContainer"></div>
+
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="crearObservacion()">Crear Observación</button>
+                <button class="btn btn-secondary" onclick="editarObservacion()">Editar Observación</button>
+                <button class="btn btn-danger" onclick="eliminarObservacion()">Eliminar Observación</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function obtenerDatosCita() {
+            const idCita = document.getElementById('idCita').value;
+            if (idCita === "12345") {
+                document.getElementById('cita').value = "CC-45451313-Piso 1-101-Confama-Rionegro-Antioquia";
+                document.getElementById('medico').value = "Dr. Juan Pérez";
+            } else {
+                document.getElementById('cita').value = "";
+                document.getElementById('medico').value = "";
+            }
+        }
+
+        function preguntarObservaciones() {
+            document.getElementById('cantidadObservacionesContainer').style.display = "block";
+        }
+
+        function mostrarObservaciones() {
+            const cantidad = document.getElementById('cantidadObservaciones').value;
+            const observacionesContainer = document.getElementById('observacionesContainer');
+            observacionesContainer.innerHTML = '';  // Limpia las observaciones previas
+
+            for (let i = 1; i <= cantidad; i++) {
+                const observacionDiv = document.createElement('div');
+                observacionDiv.classList.add('form-group');
+                observacionDiv.innerHTML = `
+                    <label for="observacion${i}">Observación ${i}</label>
+                    <textarea id="observacion${i}" rows="4" placeholder="Ingrese la observación ${i}"></textarea>
+                `;
+                observacionesContainer.appendChild(observacionDiv);
+            }
+        }
+
+        function crearObservacion() {
+            alert("Observación creada para la cita: " + document.getElementById('idCita').value);
+        }
+
+        function editarObservacion() {
+            alert("Observación editada para la cita: " + document.getElementById('idCita').value);
+        }
+
+        function eliminarObservacion() {
+            alert("Observación eliminada para la cita: " + document.getElementById('idCita').value);
+        }
+
+        function actualizarReloj() {
+            const ahora = new Date();
+            const hora = ahora.getHours().toString().padStart(2, '0');
+            const minutos = ahora.getMinutes().toString().padStart(2, '0');
+            const segundos = ahora.getSeconds().toString().padStart(2, '0');
+            const dia = ahora.getDate().toString().padStart(2, '0');
+            const mes = (ahora.getMonth() + 1).toString().padStart(2, '0');
+            const anio = ahora.getFullYear();
+            
+            const reloj = document.getElementById('reloj');
+            reloj.innerText = `${dia}/${mes}/${anio} ${hora}:${minutos}:${segundos}`;
+        }
+
+        setInterval(actualizarReloj, 1000);
+    </script>
+
+</body>
+</html>
